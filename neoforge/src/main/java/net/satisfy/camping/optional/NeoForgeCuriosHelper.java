@@ -57,8 +57,10 @@ public class NeoForgeCuriosHelper {
         public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int i, float v, float v1, float v2, float v3, float v4, float v5) {
             BackpackBlockItem backpack = (BackpackBlockItem) itemStack.getItem();
             Model model = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) renderLayerParent.getModel()).body);
+            poseStack.pushPose();
             BackpackRenderLayer.performTranslations(poseStack, backpack.variant, slotContext.entity().isCrouching());
             model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY);
+            poseStack.popPose();
         }
     }
 

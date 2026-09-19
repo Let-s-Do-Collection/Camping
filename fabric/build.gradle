@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "net.darkhax.curseforgegradle" version "1.1.25"
 }
 
 java {
@@ -102,25 +102,20 @@ modrinth {
     }
 }
 
-curseforge {
-    apiKey = System.getenv("CURSEFORGE_API_KEY")
-    project {
-        id = "1072398"
-        releaseType = "release"
-        addGameVersion rootProject.minecraft_version
-        addGameVersion "Fabric"
+tasks.register("curseforge1072398", net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_API_KEY")
+    disableVersionDetection()
 
-        mainArtifact(tasks.named("remapJar").flatMap { it.archiveFile }) {
-            displayName = "${rootProject.mod_name} - ${rootProject.version} - FABRIC - ${rootProject.minecraft_version}"
-            changelog = changelogText
-            changelogType = "markdown"
-        }
-
-        relations {
-            requiredDependency "cloth-config"
-            requiredDependency "trinkets"
-        }
-    }
+    def mainFile = upload("1072398", tasks.named("remapJar"))
+    mainFile.releaseType = "release"
+    mainFile.changelog = changelogText
+    mainFile.changelogType = "markdown"
+    mainFile.displayName = "${rootProject.mod_name} - ${rootProject.version} - FABRIC - ${rootProject.minecraft_version}"
+    mainFile.addGameVersion(rootProject.minecraft_version)
+    mainFile.addModLoader("Fabric")
+    mainFile.addEnvironment("Client", "Server")
+    mainFile.addRequirement("cloth-config")
+    mainFile.addRequirement("trinkets")
 }
 
 def escapeJson = { String s ->

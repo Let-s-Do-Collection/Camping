@@ -1,3 +1,15 @@
+[2.1.5]
+
+**Fixed**
+- Backpacks in Curios slots (NeoForge) leaving a leftover PoseStack transform, misplacing other visible Curios items (e.g. lanterns, spellbooks) rendered afterward
+- NeoForge loot injector not working, making backpacks unobtainable from loot (loot modifiers now live under `data/neoforge/` and use `neoforge:loot_table_id`)
+
+**Changed**
+- Updated ru_ru (thanks to Tefny)
+- Converted mod images from PNG to WEBP
+
+***
+
 [2.1.4]
 
 **Fixed**

@@ -2,7 +2,7 @@ plugins {
     id 'idea'
     id 'net.neoforged.moddev' version '2.0.+'
     id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "net.darkhax.curseforgegradle" version "1.1.25"
 }
 
 java {
@@ -106,20 +106,17 @@ modrinth {
     }
 }
 
-curseforge {
-    apiKey = System.getenv("CURSEFORGE_API_KEY")
-    project {
-        id = "1072398"
-        releaseType = "release"
-        addGameVersion rootProject.minecraft_version
-        addGameVersion "NeoForge"
-        mainArtifact(tasks.named("jar").flatMap { it.archiveFile }) {
-            displayName = "${rootProject.mod_name} - ${rootProject.version} - NEOFORGE - ${rootProject.minecraft_version}"
-            changelog = changelogText
-            changelogType = "markdown"
-        }
-        relations {
-            requiredDependency "curios"
-        }
-    }
+tasks.register("curseforge1072398", net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_API_KEY")
+    disableVersionDetection()
+
+    def mainFile = upload("1072398", tasks.named("jar"))
+    mainFile.releaseType = "release"
+    mainFile.changelog = changelogText
+    mainFile.changelogType = "markdown"
+    mainFile.displayName = "${rootProject.mod_name} - ${rootProject.version} - NEOFORGE - ${rootProject.minecraft_version}"
+    mainFile.addGameVersion(rootProject.minecraft_version)
+    mainFile.addModLoader("NeoForge")
+    mainFile.addEnvironment("Client", "Server")
+    mainFile.addRequirement("curios")
 }
