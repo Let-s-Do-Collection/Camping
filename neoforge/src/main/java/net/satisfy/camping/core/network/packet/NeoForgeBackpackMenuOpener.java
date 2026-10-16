@@ -57,8 +57,9 @@ public final class NeoForgeBackpackMenuOpener {
         final NonNullList<ItemStack> itemsFinal = tmp;
 
         BlockPos pos = player.blockPosition();
+        int rows = BackpackContainer.getRows(equipped);
         player.openMenu(new SimpleMenuProvider(
-                (id, inv, p) -> new NeoForgeBackpackScreenHandler(id, inv, new BackpackContainer(itemsFinal, p, EquipmentSlot.CHEST), pos),
+                (id, inv, p) -> new NeoForgeBackpackScreenHandler(id, inv, new BackpackContainer(itemsFinal, p, EquipmentSlot.CHEST), pos, rows),
                 Component.translatable("container.camping.backpack")
         ));
     }

@@ -24,10 +24,24 @@ public class BackpackBlockShapes {
         return shape;
     };
 
+    public static final Supplier<VoxelShape> LARGE_BACKPACK_UNROLLED = () -> {
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.4375, 0.8125, 0.75, 0.6875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.25, 0, 0.3125, 0.75, 0.375, 0.4375), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.4375, 0.5, 0.375, 0.5625, 0.625, 0.4375), BooleanOp.OR);
+        return shape;
+    };
+
     public static final Supplier<VoxelShape> WANDERER_BACKPACK = () -> {
         VoxelShape shape = Shapes.empty();
         shape = Shapes.join(shape, Shapes.box(0.125, 0.5, 0.4375, 0.875, 0.6875, 0.625), BooleanOp.OR);
         shape = Shapes.join(shape, Shapes.box(0.1875, 0.25, 0.3125, 0.8125, 0.5, 0.6875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.3125, 0.8125, 0.5, 0.6875), BooleanOp.OR);
+        return shape;
+    };
+
+    public static final Supplier<VoxelShape> WANDERER_BACKPACK_UNROLLED = () -> {
+        VoxelShape shape = Shapes.empty();
         shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.3125, 0.8125, 0.5, 0.6875), BooleanOp.OR);
         return shape;
     };

@@ -28,17 +28,20 @@ public class CampingBlocks {
     public static final Block ENDERBAG = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERBAG);
 
     public static final Block GOODYBAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.GOODYBAG);
-    public static final Block LARGE_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.LARGE_BACKPACK);
+    public static final Block LARGE_BACKPACK = new SleepingBagBackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.LARGE_BACKPACK, 12.0 / 16.0);
     public static final Block SHEEPBAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.SHEEPBAG);
     public static final Block SMALL_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.SMALL_BACKPACK);
-    public static final Block WANDERER_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.WANDERER_BACKPACK);
+    public static final Block WANDERER_BACKPACK = new SleepingBagBackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.WANDERER_BACKPACK, 8.0 / 16.0);
     public static final Block WANDERER_BAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.WANDERER_BAG);
 
     public static final Map<String, Block> SLEEPING_BAGS = new HashMap<>();
-    public static final Map<String, Block> TENT_MAIN = new HashMap<>();
-    public static final Map<String, Block> TENT_MAIN_HEAD = new HashMap<>();
-    public static final Map<String, Block> TENT_RIGHT = new HashMap<>();
-    public static final Map<String, Block> TENT_HEAD_RIGHT = new HashMap<>();
+    public static final Map<String, Block> TENTS = new HashMap<>();
+
+    static {
+        for (DyeColor dyeColor : DyeColor.values()) {
+            TENTS.put(dyeColor.getName(), new TentBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak().dynamicShape(), dyeColor));
+        }
+    }
 
     public static void register(BiConsumer<Block, ResourceLocation> consumer) {
         consumer.accept(GRILL, Camping.identifier("grill"));
@@ -61,18 +64,7 @@ public class CampingBlocks {
             SLEEPING_BAGS.put(colorName, dyedSleepingBag);
             consumer.accept(dyedSleepingBag, Camping.identifier("sleeping_bag_" + colorName));
 
-            Block coloredTentMain = new TentMainBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
-            Block coloredTentMainHead = new TentMainHeadBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
-            Block coloredTentRight = new TentRightBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
-            Block coloredTentHeadRight = new TentRightHeadBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
-            TENT_MAIN.put(colorName, coloredTentMain);
-            TENT_MAIN_HEAD.put(colorName, coloredTentMainHead);
-            TENT_RIGHT.put(colorName, coloredTentRight);
-            TENT_HEAD_RIGHT.put(colorName, coloredTentHeadRight);
-            consumer.accept(coloredTentMain, Camping.identifier("tent_" + colorName));
-            consumer.accept(coloredTentMainHead, Camping.identifier("tent_head_" + colorName));
-            consumer.accept(coloredTentRight, Camping.identifier("tent_right_" + colorName));
-            consumer.accept(coloredTentHeadRight, Camping.identifier("tent_head_right_" + colorName));
+            consumer.accept(TENTS.get(colorName), Camping.identifier("tent_" + colorName));
         }
     }
 }

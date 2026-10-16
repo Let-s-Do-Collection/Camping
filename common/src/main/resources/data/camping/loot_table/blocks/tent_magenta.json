@@ -6,6 +6,14 @@
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "camping:tent_magenta",
+          "properties": {
+            "part": "main",
+            "half": "lower"
+          }
         }
       ],
       "entries": [

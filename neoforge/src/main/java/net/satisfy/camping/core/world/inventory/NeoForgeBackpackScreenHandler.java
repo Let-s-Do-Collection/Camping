@@ -5,14 +5,15 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.core.registry.CampingScreenHandlers;
 import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 public class NeoForgeBackpackScreenHandler extends BackpackScreenHandler {
 
-    public NeoForgeBackpackScreenHandler(int id, Inventory inv, BackpackContainer container, BlockPos pos) {
-        super(id, inv, container, pos);
+    public NeoForgeBackpackScreenHandler(int id, Inventory inv, BackpackContainer container, BlockPos pos, int rows) {
+        super(CampingScreenHandlers.backpack(rows), id, inv, container, pos, rows);
     }
 
     @Override

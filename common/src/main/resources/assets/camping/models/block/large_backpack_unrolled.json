@@ -1,0 +1,244 @@
+{
+	"credit": "Made by Satisfy",
+	"textures": {
+		"1": "camping:block/large_backpack_body",
+		"2": "camping:block/large_backpack_back",
+		"3": "camping:block/large_backpack_bag",
+		"particle": "camping:block/large_backpack_body"
+	},
+	"elements": [
+		{
+			"name": "pack",
+			"from": [
+				3,
+				0,
+				7
+			],
+			"to": [
+				13,
+				12,
+				11
+			],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [
+					8,
+					8.75,
+					7.5
+				]
+			},
+			"faces": {
+				"north": {
+					"uv": [
+						14,
+						0,
+						4,
+						12
+					],
+					"texture": "#1"
+				},
+				"east": {
+					"uv": [
+						4,
+						0,
+						0,
+						12
+					],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [
+						10,
+						0,
+						0,
+						12
+					],
+					"texture": "#2"
+				},
+				"west": {
+					"uv": [
+						14,
+						0,
+						10,
+						12
+					],
+					"texture": "#2"
+				},
+				"up": {
+					"uv": [
+						10,
+						12,
+						0,
+						16
+					],
+					"texture": "#2"
+				},
+				"down": {
+					"uv": [
+						10,
+						16,
+						0,
+						12
+					],
+					"texture": "#1"
+				}
+			}
+		},
+		{
+			"name": "small_pack",
+			"from": [
+				4,
+				0,
+				5
+			],
+			"to": [
+				12,
+				6,
+				7
+			],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [
+					8,
+					8.75,
+					7.5
+				]
+			},
+			"faces": {
+				"north": {
+					"uv": [
+						10,
+						0,
+						2,
+						6
+					],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						2,
+						6
+					],
+					"texture": "#3"
+				},
+				"west": {
+					"uv": [
+						2,
+						0,
+						0,
+						6
+					],
+					"texture": "#3"
+				},
+				"up": {
+					"uv": [
+						8,
+						6,
+						0,
+						8
+					],
+					"texture": "#3"
+				},
+				"down": {
+					"uv": [
+						8,
+						10,
+						0,
+						8
+					],
+					"texture": "#3"
+				}
+			}
+		},
+		{
+			"name": "lock",
+			"from": [
+				7,
+				8,
+				6
+			],
+			"to": [
+				9,
+				10,
+				7
+			],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [
+					8,
+					8.75,
+					7.5
+				]
+			},
+			"faces": {
+				"north": {
+					"uv": [
+						10,
+						2,
+						8,
+						4
+					],
+					"texture": "#1"
+				},
+				"east": {
+					"uv": [
+						10,
+						2,
+						9,
+						4
+					],
+					"texture": "#1"
+				},
+				"west": {
+					"uv": [
+						9,
+						2,
+						8,
+						4
+					],
+					"texture": "#1"
+				},
+				"up": {
+					"uv": [
+						10,
+						2,
+						8,
+						3
+					],
+					"texture": "#1"
+				},
+				"down": {
+					"uv": [
+						10,
+						3,
+						8,
+						4
+					],
+					"texture": "#1"
+				}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "large_backpack",
+			"origin": [
+				8,
+				0,
+				8
+			],
+			"color": 0,
+			"children": [
+				0,
+				1,
+				2,
+				3
+			]
+		}
+	]
+}

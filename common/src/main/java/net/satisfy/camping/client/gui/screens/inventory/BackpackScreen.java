@@ -14,6 +14,7 @@ public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandle
 
     public BackpackScreen(BackpackScreenHandler screenHandler, Inventory inventory, Component component) {
         super(screenHandler, inventory, component);
+        this.imageHeight = 166 + (screenHandler.getRows() - 3) * 18;
     }
 
     @Override
@@ -35,6 +36,11 @@ public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandle
     protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2 - 20;
-        guiGraphics.blit(CONTAINER_LOCATION, k, l, 0, -5, this.imageWidth, this.imageHeight + 25);
+        int rows = this.menu.getRows();
+        guiGraphics.blit(CONTAINER_LOCATION, k, l + 5, 0, 0, this.imageWidth, 26);
+        for (int row = 0; row < rows; row++) {
+            guiGraphics.blit(CONTAINER_LOCATION, k, l + 31 + row * 18, 0, 26, this.imageWidth, 18);
+        }
+        guiGraphics.blit(CONTAINER_LOCATION, k, l + 31 + rows * 18, 0, 80, this.imageWidth, 103);
     }
 }

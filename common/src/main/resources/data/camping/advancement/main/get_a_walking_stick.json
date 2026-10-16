@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/root",
+  "display": {
+    "icon": {
+      "id": "camping:walking_stick"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_walking_stick.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_walking_stick.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "walking_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:walking_stick"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "walking_stick"
+    ]
+  ]
+}

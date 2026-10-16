@@ -26,5 +26,10 @@ public class NeoForgeWanderingTraderMixin {
             MerchantOffer customOffer = new MerchantOffer(new ItemCost(Items.EMERALD, emeraldCost), new ItemStack(CampingItems.WANDERER_BACKPACK), 6, 2, 0.05F);
             offers.add(customOffer);
         }
+
+        if (random.nextInt(5) == 0) {
+            int emeraldCost = 16 + random.nextInt(16);
+            offers.add(new MerchantOffer(new ItemCost(Items.EMERALD, emeraldCost), new ItemStack(CampingItems.WANDERER_BAG), 6, 2, 0.05F));
+        }
     }
 }

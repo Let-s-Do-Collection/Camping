@@ -2,11 +2,13 @@ package net.satisfy.camping.core.world.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -38,14 +40,19 @@ public class MultitoolItem extends Item {
 
         if (!level.isClientSide) {
             MultitoolUtil.rotateBlock(level, blockPos, blockState, player.isShiftKeyDown());
+            context.getItemInHand().hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
+    public boolean isValidRepairItem(@NotNull ItemStack stack, ItemStack repairCandidate) {
+        return repairCandidate.is(Items.IRON_NUGGET);
+    }
+
+    @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @NotNull TooltipContext tooltipContext, List<Component> tooltip, @NotNull TooltipFlag tooltipFlag) {
-        tooltip.add(Component.translatable("tooltip.camping.multitool").setStyle(Style.EMPTY.withColor(0x556B2F))
-        );
+        tooltip.add(Component.translatable("tooltip.camping.multitool").withStyle(ChatFormatting.GRAY));
     }
 }

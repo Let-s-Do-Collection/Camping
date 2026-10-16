@@ -14,11 +14,15 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.world.BackpackContainer;
+import net.satisfy.camping.core.world.block.BackpackBlock;
 import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackBlockEntity extends BaseContainerBlockEntity {
-    public static final int CONTAINER_SIZE = 24;
+    public static final int COLUMNS = 8;
+    public static final int MAX_ROWS = 6;
+    public static final int CONTAINER_SIZE = COLUMNS * MAX_ROWS;
     public static final String ITEMS_TAG = "Items";
     private NonNullList<ItemStack> itemStacks;
 
@@ -28,7 +32,11 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     public int getContainerSize() {
-        return this.itemStacks.size();
+        return this.getRows() * COLUMNS;
+    }
+
+    public int getRows() {
+        return this.getBlockState().getBlock() instanceof BackpackBlock backpack ? PlatformHelper.getBackpackRows(backpack.getVariant()) : MAX_ROWS;
     }
 
     @Override
@@ -103,7 +111,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     protected @NotNull AbstractContainerMenu createMenu(int id, @NotNull Inventory inv) {
-        return new BackpackScreenHandler(id, inv, new BackpackContainer(this.itemStacks), this.worldPosition);
+        return BackpackScreenHandler.create(id, inv, new BackpackContainer(this.itemStacks), this.worldPosition, this.getRows());
     }
 
     @Override

@@ -67,7 +67,8 @@ public class FabricOpenBackpackC2SPacket implements CustomPacketPayload {
 
     private static void openEquipment(ServerPlayer player, Component title) {
         BackpackContainer c = BackpackContainer.forEquipment(player, EquipmentSlot.CHEST);
-        MenuConstructor ctor = (sync, inv, p) -> new BackpackScreenHandler(sync, inv, c, BlockPos.ZERO);
+        int rows = BackpackContainer.getRows(player.getItemBySlot(EquipmentSlot.CHEST));
+        MenuConstructor ctor = (sync, inv, p) -> BackpackScreenHandler.create(sync, inv, c, BlockPos.ZERO, rows);
         MenuProvider prov = new MenuProvider() {
             @Override public @NotNull Component getDisplayName() { return title; }
             @Override public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player p) { return ctor.createMenu(id, inv, p); }
@@ -77,7 +78,8 @@ public class FabricOpenBackpackC2SPacket implements CustomPacketPayload {
 
     private static void openTrinket(ServerPlayer player, dev.emi.trinkets.api.SlotReference ref, Component title, ItemStack stack) {
         TrinketBackpackContainer c = TrinketBackpackContainer.of(player, ref, stack);
-        MenuConstructor ctor = (sync, inv, p) -> new BackpackScreenHandler(sync, inv, c, BlockPos.ZERO);
+        int rows = BackpackContainer.getRows(stack);
+        MenuConstructor ctor = (sync, inv, p) -> BackpackScreenHandler.create(sync, inv, c, BlockPos.ZERO, rows);
         MenuProvider prov = new MenuProvider() {
             @Override public @NotNull Component getDisplayName() { return title; }
             @Override public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player p) { return ctor.createMenu(id, inv, p); }

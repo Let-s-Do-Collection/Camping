@@ -1,9 +1,10 @@
 package net.satisfy.camping.core.world.block;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionHand;
@@ -43,6 +44,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.platform.PlatformHelper;
+import net.satisfy.foundation.overlay.BlockNotice;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +57,7 @@ import java.util.List;
 @ParametersAreNullableByDefault
 public class SleepingBagBlock extends BedBlock {
 
+    public static final double SLEEPING_HEIGHT = 0.375;
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
     public static final BooleanProperty CAN_DROP = BlockStateProperties.CONDITIONAL;
     protected static final VoxelShape SLEEPING_BAG_SHAPE = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.25, 1.0D);
@@ -161,14 +165,23 @@ public class SleepingBagBlock extends BedBlock {
         }
         if (state.getValue(OCCUPIED)) {
             if (!this.kickVillagerOutOfBed(level, pos)) {
-                player.displayClientMessage(Component.translatable("block.minecraft.bed.occupied"), true);
+                notice(player, pos, Component.translatable("block.minecraft.bed.occupied"));
             }
             return InteractionResult.SUCCESS;
         } else {
-            player.startSleepInBed(pos).ifLeft(f -> {
-                if (f.getMessage() != null) player.displayClientMessage(f.getMessage(), true);
-            }).ifRight(s -> player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1)));
+            BlockPos headPos = pos;
+            player.startSleepInBed(headPos).ifLeft(f -> {
+                if (f.getMessage() != null) notice(player, headPos, f.getMessage());
+            }).ifRight(s -> {
+                if (PlatformHelper.isSleepingBagRegenerationEnabled()) player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+            });
             return InteractionResult.SUCCESS;
+        }
+    }
+
+    private static void notice(Player player, BlockPos pos, Component message) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            BlockNotice.send(serverPlayer, pos, message);
         }
     }
 
@@ -179,7 +192,7 @@ public class SleepingBagBlock extends BedBlock {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Item.TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").setStyle(Style.EMPTY.withColor(0x556B2F).withItalic(true)));
+        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").withStyle(ChatFormatting.GRAY));
     }
 
     @Override

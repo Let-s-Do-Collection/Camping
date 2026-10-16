@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
 
     @Override
     public int getContainerSize() {
-        return BackpackBlockEntity.CONTAINER_SIZE;
+        return stacks.size();
     }
 
     @Override
@@ -126,6 +127,10 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
         NonNullList<ItemStack> list = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
         stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyInto(list);
         return list;
+    }
+
+    public static int getRows(ItemStack stack) {
+        return stack.getItem() instanceof BackpackBlockItem item ? PlatformHelper.getBackpackRows(item.variant) : BackpackBlockEntity.MAX_ROWS;
     }
 
     private static boolean allEmpty(NonNullList<ItemStack> items) {

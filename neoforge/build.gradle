@@ -10,7 +10,7 @@ java {
 }
 
 base {
-    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+    archivesName = "letsdo-${mod_id}-neoforge"
 }
 
 def changelogText = rootProject.file("CHANGELOG.md").text
@@ -19,6 +19,7 @@ repositories {
     mavenCentral()
     maven { url "https://maven.blamejared.com/" }
     maven { url "https://maven.theillusivec4.top/" }
+    maven { url "https://maven.architectury.dev/" }
     maven {
         url "https://cursemaven.com"
         content { includeGroup "curse.maven" }
@@ -68,7 +69,9 @@ sourceSets {
 
 dependencies {
     implementation project(":common")
-    annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT:processor"
+    implementation "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
+    implementation("net.satisfy.foundation:foundation-neoforge:${rootProject.foundation_version}") { transitive = false }
+    jarJar("net.satisfy.foundation:foundation-neoforge:${rootProject.foundation_version}") { transitive = false }
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${rootProject.jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${rootProject.curios_version}"

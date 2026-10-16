@@ -1,5 +1,5 @@
 {
-  "parent": "camping:main/root",
+  "parent": "camping:main/sleep_in_sleeping_bag",
   "criteria": {
     "use_beef_on_grill": {
       "trigger": "minecraft:item_used_on_block",

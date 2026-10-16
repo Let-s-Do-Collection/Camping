@@ -18,7 +18,11 @@ public class RegistryFabric {
     public static void register() {
         CampingBlocks.register(bind(BuiltInRegistries.BLOCK));
         CampingBlockEntities.register(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE));
+        CampingEntities.register(bind(BuiltInRegistries.ENTITY_TYPE));
         CampingItems.register(bind(BuiltInRegistries.ITEM));
+        CampingParticles.register(bind(BuiltInRegistries.PARTICLE_TYPE));
+        CampingEffects.register(bind(BuiltInRegistries.MOB_EFFECT));
+        CampingSounds.register(bind(BuiltInRegistries.SOUND_EVENT));
         RegistryFabric.registerTab(bind(BuiltInRegistries.CREATIVE_MODE_TAB));
 
         CampingScreenHandlers.register(bind(BuiltInRegistries.MENU));
@@ -34,7 +38,7 @@ public class RegistryFabric {
     }
 
     public static final CreativeModeTab CREATIVE_TAB = FabricItemGroup.builder()
-            .icon(() -> new ItemStack(CampingBlocks.GRILL))
+            .icon(() -> new ItemStack(CampingItems.LARGE_BACKPACK))
             .title(Component.translatable("itemGroup.camping").setStyle(Style.EMPTY.withColor(0x556B2F)))
             .displayItems((itemDisplayParameters, output) -> CampingItems.CREATIVE_TAB_ITEMS.forEach(output::accept))
             .build();

@@ -1,0 +1,33 @@
+{
+  "parent": "camping:main/use_beef_on_grill",
+  "display": {
+    "icon": {
+      "id": "camping:marshmallow_on_a_stick"
+    },
+    "title": {
+      "translate": "advancement.camping.eat_marshmallow_on_a_stick.title"
+    },
+    "description": {
+      "translate": "advancement.camping.eat_marshmallow_on_a_stick.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "eat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "camping:marshmallow_on_a_stick"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "eat"
+    ]
+  ]
+}

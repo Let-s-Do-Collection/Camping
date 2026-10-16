@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -24,18 +25,25 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     private final Player player;
     private final BlockPos blockPos;
     private final boolean portable;
+    private final int rows;
 
-    public BackpackScreenHandler(int syncId, Inventory playerInventory, BackpackContainer container, BlockPos blockPos) {
-        super(CampingScreenHandlers.BACKPACK, syncId);
+    public static BackpackScreenHandler create(int syncId, Inventory playerInventory, BackpackContainer container, BlockPos blockPos, int rows) {
+        return new BackpackScreenHandler(CampingScreenHandlers.backpack(rows), syncId, playerInventory, container, blockPos, rows);
+    }
+
+    public BackpackScreenHandler(MenuType<?> type, int syncId, Inventory playerInventory, BackpackContainer container, BlockPos blockPos, int rows) {
+        super(type, syncId);
         checkContainerSize(container, BackpackBlockEntity.CONTAINER_SIZE);
         this.container = container;
         this.player = playerInventory.player;
         this.blockPos = blockPos;
         this.portable = blockPos.equals(BlockPos.ZERO);
+        this.rows = rows;
         container.startOpen(playerInventory.player);
-        for (int j = 0; j < 3; ++j) {
-            for (int k = 0; k < 8; ++k) {
-                this.addSlot(new Slot(container, k + j * 8, 17 + k * 18, 12 + j * 18) {
+        if (!this.player.level().isClientSide) this.moveOverflow();
+        for (int j = 0; j < rows; ++j) {
+            for (int k = 0; k < BackpackBlockEntity.COLUMNS; ++k) {
+                this.addSlot(new Slot(container, k + j * BackpackBlockEntity.COLUMNS, 17 + k * 18, 12 + j * 18) {
                     @Override
                     public boolean mayPlace(@NotNull ItemStack stack) {
                         return !stack.is(CampingTags.BACKPACK_BLACKLIST);
@@ -43,7 +51,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
                 });
             }
         }
-        int oy = 1;
+        int oy = 1 + (rows - 3) * 18;
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
                 this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 85 + j * 18 + oy));
@@ -54,8 +62,28 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         }
     }
 
-    public BackpackScreenHandler(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new BackpackContainer(NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY)), BlockPos.ZERO);
+    public BackpackScreenHandler(int syncId, Inventory playerInventory, int rows) {
+        this(CampingScreenHandlers.backpack(rows), syncId, playerInventory, new BackpackContainer(NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY)), BlockPos.ZERO, rows);
+    }
+
+    public int getRows() {
+        return this.rows;
+    }
+
+    private void moveOverflow() {
+        int size = this.rows * BackpackBlockEntity.COLUMNS;
+        for (int i = size; i < this.container.getContainerSize(); i++) {
+            ItemStack stack = this.container.getItem(i);
+            if (stack.isEmpty()) continue;
+            this.container.setItem(i, ItemStack.EMPTY);
+            for (int j = 0; j < size && !stack.isEmpty(); j++) {
+                if (this.container.getItem(j).isEmpty()) {
+                    this.container.setItem(j, stack);
+                    stack = ItemStack.EMPTY;
+                }
+            }
+            if (!stack.isEmpty()) this.player.getInventory().placeItemBackInInventory(stack);
+        }
     }
 
     @Override
@@ -66,9 +94,10 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         if (!slot.hasItem()) return ItemStack.EMPTY;
         ItemStack in = slot.getItem();
         ret = in.copy();
-        if (i < BackpackBlockEntity.CONTAINER_SIZE) {
-            if (!this.moveItemStackTo(in, BackpackBlockEntity.CONTAINER_SIZE, this.slots.size(), true)) return ItemStack.EMPTY;
-        } else if (!this.moveItemStackTo(in, 0, BackpackBlockEntity.CONTAINER_SIZE, false)) {
+        int size = this.rows * BackpackBlockEntity.COLUMNS;
+        if (i < size) {
+            if (!this.moveItemStackTo(in, size, this.slots.size(), true)) return ItemStack.EMPTY;
+        } else if (!this.moveItemStackTo(in, 0, size, false)) {
             return ItemStack.EMPTY;
         }
         if (in.isEmpty()) slot.setByPlayer(ItemStack.EMPTY);

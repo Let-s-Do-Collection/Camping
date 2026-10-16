@@ -1,35 +1,131 @@
 {
   "variants": {
-    "half=upper,facing=north": {
+    "part=main,half=upper,facing=north": {
       "model": "camping:block/tent_main_upper_pink",
       "y": 0
     },
-    "half=upper,facing=south": {
+    "part=main,half=upper,facing=south": {
       "model": "camping:block/tent_main_upper_pink",
       "y": 180
     },
-    "half=upper,facing=west": {
+    "part=main,half=upper,facing=west": {
       "model": "camping:block/tent_main_upper_pink",
       "y": 270
     },
-    "half=upper,facing=east": {
+    "part=main,half=upper,facing=east": {
       "model": "camping:block/tent_main_upper_pink",
       "y": 90
     },
-    "half=lower,facing=north": {
+    "part=main,half=lower,facing=north": {
       "model": "camping:block/tent_main_lower_pink",
       "y": 0
     },
-    "half=lower,facing=south": {
+    "part=main,half=lower,facing=south": {
       "model": "camping:block/tent_main_lower_pink",
       "y": 180
     },
-    "half=lower,facing=west": {
+    "part=main,half=lower,facing=west": {
       "model": "camping:block/tent_main_lower_pink",
       "y": 270
     },
-    "half=lower,facing=east": {
+    "part=main,half=lower,facing=east": {
       "model": "camping:block/tent_main_lower_pink",
+      "y": 90
+    },
+    "part=main_head,half=upper,facing=north": {
+      "model": "camping:block/tent_head_right_upper_pink",
+      "y": 0
+    },
+    "part=main_head,half=upper,facing=south": {
+      "model": "camping:block/tent_head_right_upper_pink",
+      "y": 180
+    },
+    "part=main_head,half=upper,facing=west": {
+      "model": "camping:block/tent_head_right_upper_pink",
+      "y": 270
+    },
+    "part=main_head,half=upper,facing=east": {
+      "model": "camping:block/tent_head_right_upper_pink",
+      "y": 90
+    },
+    "part=main_head,half=lower,facing=north": {
+      "model": "camping:block/tent_head_right_lower_pink",
+      "y": 0
+    },
+    "part=main_head,half=lower,facing=south": {
+      "model": "camping:block/tent_head_right_lower_pink",
+      "y": 180
+    },
+    "part=main_head,half=lower,facing=west": {
+      "model": "camping:block/tent_head_right_lower_pink",
+      "y": 270
+    },
+    "part=main_head,half=lower,facing=east": {
+      "model": "camping:block/tent_head_right_lower_pink",
+      "y": 90
+    },
+    "part=right,half=upper,facing=north": {
+      "model": "camping:block/tent_right_upper_pink",
+      "y": 0
+    },
+    "part=right,half=upper,facing=south": {
+      "model": "camping:block/tent_right_upper_pink",
+      "y": 180
+    },
+    "part=right,half=upper,facing=west": {
+      "model": "camping:block/tent_right_upper_pink",
+      "y": 270
+    },
+    "part=right,half=upper,facing=east": {
+      "model": "camping:block/tent_right_upper_pink",
+      "y": 90
+    },
+    "part=right,half=lower,facing=north": {
+      "model": "camping:block/tent_right_lower_pink",
+      "y": 0
+    },
+    "part=right,half=lower,facing=south": {
+      "model": "camping:block/tent_right_lower_pink",
+      "y": 180
+    },
+    "part=right,half=lower,facing=west": {
+      "model": "camping:block/tent_right_lower_pink",
+      "y": 270
+    },
+    "part=right,half=lower,facing=east": {
+      "model": "camping:block/tent_right_lower_pink",
+      "y": 90
+    },
+    "part=right_head,half=upper,facing=north": {
+      "model": "camping:block/tent_main_head_upper_pink",
+      "y": 0
+    },
+    "part=right_head,half=upper,facing=south": {
+      "model": "camping:block/tent_main_head_upper_pink",
+      "y": 180
+    },
+    "part=right_head,half=upper,facing=west": {
+      "model": "camping:block/tent_main_head_upper_pink",
+      "y": 270
+    },
+    "part=right_head,half=upper,facing=east": {
+      "model": "camping:block/tent_main_head_upper_pink",
+      "y": 90
+    },
+    "part=right_head,half=lower,facing=north": {
+      "model": "camping:block/tent_main_head_lower_pink",
+      "y": 0
+    },
+    "part=right_head,half=lower,facing=south": {
+      "model": "camping:block/tent_main_head_lower_pink",
+      "y": 180
+    },
+    "part=right_head,half=lower,facing=west": {
+      "model": "camping:block/tent_main_head_lower_pink",
+      "y": 270
+    },
+    "part=right_head,half=lower,facing=east": {
+      "model": "camping:block/tent_main_head_lower_pink",
       "y": 90
     }
   }

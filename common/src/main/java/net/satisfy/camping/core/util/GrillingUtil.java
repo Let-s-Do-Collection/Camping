@@ -3,10 +3,11 @@ package net.satisfy.camping.core.util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.satisfy.camping.platform.PlatformHelper;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class GrillingUtil {
     public static void increaseFoodValue(ItemStack itemStack) {
         FoodProperties food = itemStack.get(DataComponents.FOOD);
         if (food != null) {
-            int newNutrition = (int) (food.nutrition() * 1.25);
+            int newNutrition = (int) (food.nutrition() * PlatformHelper.getGrilledFoodMultiplier());
             float newSaturation = food.saturation() / (food.nutrition() * 2); // satpts = nutr * satmod * 2
 
             FoodProperties boosted = new FoodProperties.Builder()
@@ -70,16 +71,9 @@ public class GrillingUtil {
 
     public static void addGrilledTooltip(ItemStack itemStack, List<Component> tooltip) {
         if (isGrilled(itemStack)) {
-            tooltip.add(Component.translatable("tooltip.camping.grilled")
-                    .setStyle(Style.EMPTY.withColor(0x556B2F)));
-
-            FoodValue value = getAdditionalFoodValue(itemStack);
-
-            tooltip.add(Component.translatable("tooltip.camping.grilled.nutrition", value.nutrition())
-                    .setStyle(Style.EMPTY.withColor(0xDAA520)));
-
-            tooltip.add(Component.translatable("tooltip.camping.grilled.saturationModifier", value.saturationModifier())
-                    .setStyle(Style.EMPTY.withColor(0xDAA520)));
+            int bonus = Math.round((PlatformHelper.getGrilledFoodMultiplier() - 1.0F) * 100);
+            tooltip.add(Component.translatable("tooltip.camping.grilled").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.camping.grilled.nutrition", bonus).withStyle(ChatFormatting.BLUE));
         }
     }
 

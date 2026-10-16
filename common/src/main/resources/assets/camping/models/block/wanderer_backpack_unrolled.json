@@ -1,0 +1,173 @@
+{
+	"credit": "Made by Satisfy",
+	"textures": {
+		"1": "camping:block/wanderer_backpack",
+		"2": "camping:block/wanderer_backpack_parts",
+		"particle": "camping:block/wanderer_backpack"
+	},
+	"elements": [
+		{
+			"name": "carpet",
+			"from": [
+				2.8,
+				3.8,
+				4.8
+			],
+			"to": [
+				13.2,
+				8.2,
+				11.2
+			],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [
+					4,
+					4,
+					6
+				]
+			},
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						10,
+						4
+					],
+					"texture": "#1"
+				},
+				"east": {
+					"uv": [
+						10,
+						0,
+						16,
+						4
+					],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [
+						0,
+						8,
+						10,
+						12
+					],
+					"texture": "#1"
+				},
+				"west": {
+					"uv": [
+						16,
+						0,
+						10,
+						4
+					],
+					"texture": "#1"
+				},
+				"up": {
+					"uv": [
+						10,
+						6,
+						0,
+						0
+					],
+					"texture": "#2"
+				}
+			}
+		},
+		{
+			"name": "pack",
+			"from": [
+				3,
+				0,
+				5
+			],
+			"to": [
+				13,
+				8,
+				11
+			],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [
+					4,
+					0,
+					6
+				]
+			},
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						10,
+						8
+					],
+					"texture": "#1"
+				},
+				"east": {
+					"uv": [
+						10,
+						0,
+						16,
+						8
+					],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [
+						0,
+						8,
+						10,
+						16
+					],
+					"texture": "#1"
+				},
+				"west": {
+					"uv": [
+						16,
+						0,
+						10,
+						8
+					],
+					"texture": "#1"
+				},
+				"up": {
+					"uv": [
+						10,
+						6,
+						0,
+						12
+					],
+					"texture": "#2"
+				},
+				"down": {
+					"uv": [
+						10,
+						6,
+						0,
+						12
+					],
+					"texture": "#2"
+				}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "wanderers_backpack",
+			"origin": [
+				8,
+				0,
+				14
+			],
+			"color": 0,
+			"children": [
+				0,
+				1,
+				2
+			]
+		}
+	]
+}

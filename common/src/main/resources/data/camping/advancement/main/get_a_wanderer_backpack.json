@@ -1,5 +1,5 @@
 {
-  "parent": "camping:main/get_a_small_backpack",
+  "parent": "camping:main/get_a_large_backpack",
   "display": {
     "icon": {
       "id": "camping:wanderer_backpack"

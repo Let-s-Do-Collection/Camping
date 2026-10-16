@@ -21,7 +21,11 @@ public class NeoForgeRegistry {
     public static void register(IEventBus modEventBus) {
         bind(modEventBus, Registries.BLOCK, CampingBlocks::register);
         bind(modEventBus, Registries.BLOCK_ENTITY_TYPE, CampingBlockEntities::register);
+        bind(modEventBus, Registries.ENTITY_TYPE, CampingEntities::register);
         bind(modEventBus, Registries.ITEM, CampingItems::register);
+        bind(modEventBus, Registries.PARTICLE_TYPE, CampingParticles::register);
+        bind(modEventBus, Registries.MOB_EFFECT, CampingEffects::register);
+        bind(modEventBus, Registries.SOUND_EVENT, CampingSounds::register);
         bind(modEventBus, Registries.CREATIVE_MODE_TAB, NeoForgeRegistry::registerTab);
         bind(modEventBus, Registries.MENU, CampingScreenHandlers::register);
         bind(modEventBus, NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, NeoForgeCampingLootModifiers::register);
@@ -38,7 +42,7 @@ public class NeoForgeRegistry {
 
     public static final CreativeModeTab CREATIVE_TAB = CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-            .icon(() -> new ItemStack(CampingBlocks.GRILL))
+            .icon(() -> new ItemStack(CampingItems.LARGE_BACKPACK))
             .title(Component.translatable("itemGroup.camping"))
             .displayItems((p, out) -> CampingItems.CREATIVE_TAB_ITEMS.forEach(out::accept))
             .build();

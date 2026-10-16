@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/get_a_wanderer_backpack",
+  "display": {
+    "icon": {
+      "id": "camping:wanderer_bag"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_wanderer_bag.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_wanderer_bag.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "wanderer_bag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:wanderer_bag"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "wanderer_bag"
+    ]
+  ]
+}

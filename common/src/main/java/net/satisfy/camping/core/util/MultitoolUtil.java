@@ -4,10 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.satisfy.camping.core.registry.CampingParticles;
 
 public class MultitoolUtil {
 
@@ -27,18 +31,31 @@ public class MultitoolUtil {
             return;
         }
 
+        Direction oldDirection = shiftKeyDown ? newDirection.getClockWise() : newDirection.getCounterClockWise();
         level.setBlock(pos, state, Block.UPDATE_ALL);
-        spawnBlockParticles(level, pos, state);
+        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.6F, 1.4F + level.random.nextFloat() * 0.3F);
+        if (level instanceof ServerLevel serverLevel) {
+            spawnRotationArrow(serverLevel, pos, oldDirection, !shiftKeyDown);
+            spawnFrontParticles(serverLevel, pos, state, newDirection);
+        }
     }
 
-    private static void spawnBlockParticles(Level level, BlockPos pos, BlockState state) {
-        for (Direction direction : Direction.values()) {
-            double x = pos.getX() + 0.5 + 0.5 * direction.getStepX();
-            double y = pos.getY() + 0.5 + 0.5 * direction.getStepY();
-            double z = pos.getZ() + 0.5 + 0.5 * direction.getStepZ();
+    private static void spawnRotationArrow(ServerLevel level, BlockPos pos, Direction from, boolean clockwise) {
+        double cx = pos.getX() + 0.5;
+        double cy = pos.getY() + 0.5;
+        double cz = pos.getZ() + 0.5;
+        double radius = 0.8;
+        double start = Math.atan2(from.getStepZ(), from.getStepX());
+        double sweep = clockwise ? Math.PI / 2 : -Math.PI / 2;
+        level.sendParticles(CampingParticles.ROTATION_ARROW, cx, cy, cz, 0, start, sweep, radius, 1.0);
+    }
 
-            level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z, direction.getStepX() * 0.1, direction.getStepY() * 0.1, direction.getStepZ() * 0.1
-            );
-        }
+    private static void spawnFrontParticles(ServerLevel level, BlockPos pos, BlockState state, Direction facing) {
+        double x = pos.getX() + 0.5 + 0.55 * facing.getStepX();
+        double y = pos.getY() + 0.5;
+        double z = pos.getZ() + 0.5 + 0.55 * facing.getStepZ();
+        double spreadX = facing.getStepX() == 0 ? 0.25 : 0.02;
+        double spreadZ = facing.getStepZ() == 0 ? 0.25 : 0.02;
+        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z, 8, spreadX, 0.25, spreadZ, 0.05);
     }
 }

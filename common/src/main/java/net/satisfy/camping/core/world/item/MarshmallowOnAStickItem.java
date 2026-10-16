@@ -36,6 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.satisfy.camping.core.registry.CampingItems;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -99,7 +100,7 @@ public class MarshmallowOnAStickItem extends Item {
         tag.putBoolean(NBT_ROASTING, roasting);
         if (roasting) {
             tag.putInt(NBT_TICKS, 0);
-            tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+            tag.putInt(NBT_TARGET, PlatformHelper.getMarshmallowRoastDuration() + level.random.nextInt(60));
             tag.putLong(NBT_POS, bhr.getBlockPos().asLong());
             saveData(stack, tag);
             player.startUsingItem(hand);
@@ -123,7 +124,7 @@ public class MarshmallowOnAStickItem extends Item {
         if (!tag.contains(NBT_STAGE)) tag.putString(NBT_STAGE, "default");
         tag.putBoolean(NBT_ROASTING, true);
         tag.putInt(NBT_TICKS, 0);
-        tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+        tag.putInt(NBT_TARGET, PlatformHelper.getMarshmallowRoastDuration() + level.random.nextInt(60));
         tag.putLong(NBT_POS, ctx.getClickedPos().asLong());
         saveData(stack, tag);
         player.startUsingItem(ctx.getHand());
@@ -162,9 +163,9 @@ public class MarshmallowOnAStickItem extends Item {
             }
             String s = tag.getString(NBT_STAGE);
             switch (s) {
-                case "melted" -> entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 20, 0));
-                case "charred" -> entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 20, 0));
-                case "totally_burnt" -> entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 45 * 20, 1));
+                case "melted" -> entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, PlatformHelper.getEffectDuration("melted_marshmallow"), 0));
+                case "charred" -> entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, PlatformHelper.getEffectDuration("charred_marshmallow"), 0));
+                case "totally_burnt" -> entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, PlatformHelper.getEffectDuration("totally_burnt_marshmallow"), 1));
             }
             Abilities ab = player.getAbilities();
             if (!ab.instabuild) stack.shrink(1);
@@ -221,7 +222,7 @@ public class MarshmallowOnAStickItem extends Item {
                     setStageOn(use, STAGES[idx + 1]);
                 }
                 CompoundTag t2 = getOrCreateData(use);
-                t2.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+                t2.putInt(NBT_TARGET, PlatformHelper.getMarshmallowRoastDuration() + level.random.nextInt(60));
                 t2.putInt(NBT_TICKS, 0);
                 saveData(use, t2);
                 syncHand(sp, hand);
@@ -305,6 +306,12 @@ public class MarshmallowOnAStickItem extends Item {
         CompoundTag tag = getOrCreateData(itemStack);
         String s = tag.getString(NBT_STAGE);
         if (s.isEmpty()) s = "default";
-        tooltip.add(Component.translatable("tooltip.camping.marshmallow_stage." + s).withStyle(ChatFormatting.WHITE));
+        tooltip.add(Component.translatable("tooltip.camping.marshmallow_stage." + s).withStyle(switch (s) {
+            case "warmed" -> ChatFormatting.YELLOW;
+            case "melted" -> ChatFormatting.GREEN;
+            case "charred" -> ChatFormatting.GOLD;
+            case "totally_burnt" -> ChatFormatting.RED;
+            default -> ChatFormatting.GRAY;
+        }));
     }
 }

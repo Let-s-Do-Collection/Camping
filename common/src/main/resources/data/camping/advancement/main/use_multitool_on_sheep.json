@@ -1,0 +1,42 @@
+{
+  "parent": "camping:main/get_a_multitool",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_wool"
+    },
+    "title": {
+      "translate": "advancement.camping.use_multitool_on_sheep.title"
+    },
+    "description": {
+      "translate": "advancement.camping.use_multitool_on_sheep.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sheep": {
+      "trigger": "minecraft:player_interacted_with_entity",
+      "conditions": {
+        "item": {
+          "items": "camping:multitool"
+        },
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:sheep"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sheep"
+    ]
+  ]
+}

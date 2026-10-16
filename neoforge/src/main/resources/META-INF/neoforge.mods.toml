@@ -1,6 +1,7 @@
 modLoader = "javafml"
-loaderVersion = "[2,)"
-license = "${license}"
+loaderVersion = "[4,)"
+license = "Custom"
+issueTrackerURL = "https://github.com/satisfyu/Let-s-Do-Hub"
 
 [[mixins]]
 config = "camping-neoforge.mixins.json"
@@ -8,30 +9,50 @@ config = "camping-neoforge.mixins.json"
 [[mods]]
 modId = "camping"
 version = "${version}"
-displayName = "${mod_name}"
-displayURL = "https://github.com/Let-s-Do-Collection/Let-s-Do-Collection"
-logoFile = "${mod_id}.png"
-credits = "${credits}"
-authors = "${mod_author}"
-description = '''${description}'''
+displayName = "[Let's Do] Camping"
+authors = "satisfy, Jason13Official"
+logoFile = "pack.png"
+displayURL = "https://www.lets-do.ch"
+description = '''
+Let's sleep outside today! Grab your backpack, pack your tent, the grill, and the sleeping bag, and let's go!
+
+Website: https://www.lets-do.ch
+Wiki: https://lets-do.ch/wiki/camping/
+Source: https://github.com/Let-s-Do-Collection/Camping
+Issues: https://github.com/satisfyu/Let-s-Do-Hub
+'''
 
 [[dependencies.camping]]
 modId = "neoforge"
-mandatory = true
-versionRange = "[21.0,)"
+type = "required"
+versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.camping]]
 modId = "minecraft"
-mandatory = true
-versionRange = "${minecraft_version_range}"
+type = "required"
+versionRange = "[1.21.1]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.camping]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.camping]]
+modId = "foundation"
+type = "required"
+versionRange = "[1.0.7,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.camping]]
 modId = "curios"
-mandatory = false
+type = "optional"
 versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"

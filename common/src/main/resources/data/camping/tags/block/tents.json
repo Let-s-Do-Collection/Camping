@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "camping:tent_white",
+    "camping:tent_orange",
+    "camping:tent_magenta",
+    "camping:tent_light_blue",
+    "camping:tent_yellow",
+    "camping:tent_lime",
+    "camping:tent_pink",
+    "camping:tent_gray",
+    "camping:tent_light_gray",
+    "camping:tent_cyan",
+    "camping:tent_purple",
+    "camping:tent_blue",
+    "camping:tent_brown",
+    "camping:tent_green",
+    "camping:tent_red",
+    "camping:tent_black"
+  ]
+}

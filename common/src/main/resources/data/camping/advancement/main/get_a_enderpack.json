@@ -1,5 +1,5 @@
 {
-  "parent": "camping:main/get_a_small_backpack",
+  "parent": "camping:main/get_a_enderbag",
   "display": {
     "icon": {
       "id": "camping:enderpack"
@@ -10,7 +10,7 @@
     "description": {
       "translate": "advancement.camping.get_a_enderpack.desc"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,unrolled=false": {
       "model": "camping:block/large_backpack"
     },
-    "facing=south": {
+    "facing=south,unrolled=false": {
       "model": "camping:block/large_backpack",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,unrolled=false": {
       "model": "camping:block/large_backpack",
       "y": 270
     },
-    "facing=east": {
+    "facing=east,unrolled=false": {
       "model": "camping:block/large_backpack",
+      "y": 90
+    },
+    "facing=north,unrolled=true": {
+      "model": "camping:block/large_backpack_unrolled"
+    },
+    "facing=south,unrolled=true": {
+      "model": "camping:block/large_backpack_unrolled",
+      "y": 180
+    },
+    "facing=west,unrolled=true": {
+      "model": "camping:block/large_backpack_unrolled",
+      "y": 270
+    },
+    "facing=east,unrolled=true": {
+      "model": "camping:block/large_backpack_unrolled",
       "y": 90
     }
   }

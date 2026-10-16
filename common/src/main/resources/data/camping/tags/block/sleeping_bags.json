@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "camping:sleeping_bag_white",
+    "camping:sleeping_bag_orange",
+    "camping:sleeping_bag_magenta",
+    "camping:sleeping_bag_light_blue",
+    "camping:sleeping_bag_yellow",
+    "camping:sleeping_bag_lime",
+    "camping:sleeping_bag_pink",
+    "camping:sleeping_bag_gray",
+    "camping:sleeping_bag_light_gray",
+    "camping:sleeping_bag_cyan",
+    "camping:sleeping_bag_purple",
+    "camping:sleeping_bag_blue",
+    "camping:sleeping_bag_brown",
+    "camping:sleeping_bag_green",
+    "camping:sleeping_bag_red",
+    "camping:sleeping_bag_black"
+  ]
+}

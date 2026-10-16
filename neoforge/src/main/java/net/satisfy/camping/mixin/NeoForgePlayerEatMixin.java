@@ -5,8 +5,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.satisfy.camping.core.config.NeoForgeCampingConfig;
 import net.satisfy.camping.core.util.GrillingUtil;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,15 +19,16 @@ public class NeoForgePlayerEatMixin {
     private void camping$eat(Level level, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof Player player)) return;
-        if (!NeoForgeCampingConfig.enableGrilling || !GrillingUtil.isGrilled(stack)) return;
+        if (!PlatformHelper.isGrillingEnabled() || !GrillingUtil.isGrilled(stack)) return;
 
         FoodProperties props = stack.getFoodProperties(player);
         if (props == null) return;
 
         GrillingUtil.FoodValue extra = GrillingUtil.getAdditionalFoodValue(stack);
 
-        int targetNutrition = Math.round(props.nutrition() * 1.25f) + extra.nutrition();
-        float targetSaturation = props.saturation() * 1.25f + extra.saturationModifier();
+        float multiplier = PlatformHelper.getGrilledFoodMultiplier();
+        int targetNutrition = Math.round(props.nutrition() * multiplier) + extra.nutrition();
+        float targetSaturation = props.saturation() * multiplier + extra.saturationModifier();
 
         int addNutrition = targetNutrition - props.nutrition();
         float addSaturation = targetSaturation - props.saturation();

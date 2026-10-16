@@ -1,10 +1,9 @@
 package net.satisfy.camping.mixin;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.config.FabricCampingConfig;
 import net.satisfy.camping.core.util.GrillingUtil;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FabricItemMixin {
     @Inject(method = "isFoil(Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "RETURN"), cancellable = true)
     private void camping$isFoilInject(ItemStack pStack, CallbackInfoReturnable<Boolean> cir) {
-        FabricCampingConfig config = AutoConfig.getConfigHolder(FabricCampingConfig.class).getConfig();
-        if (config.enableGlint && GrillingUtil.isGrilled(pStack)) cir.setReturnValue(true);
+        if (PlatformHelper.isGrilledGlintEnabled() && GrillingUtil.isGrilled(pStack)) cir.setReturnValue(true);
     }
 }

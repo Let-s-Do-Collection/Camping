@@ -26,19 +26,24 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.util.GrillingUtil;
 import net.satisfy.camping.core.world.block.GrillBlock;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
 public class GrillBlockEntity extends BlockEntity implements Clearable {
 
     private static final int INVENTORY_SIZE = 4;
+    private static final int FLIP_COOLDOWN_TICKS = 20;
+    private static final float SLOT_OFFSET = 0.15625F;
 
     private final int[] cookingTime;
     private final int[] cookingProgress;
+    private final long[] flipStart;
     private final NonNullList<ItemStack> items;
     private final RecipeManager.CachedCheck<SingleRecipeInput, CampfireCookingRecipe> quickCheck;
 
@@ -46,6 +51,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         super(CampingBlockEntities.GRILL, pos, state);
         this.cookingTime = new int[INVENTORY_SIZE];
         this.cookingProgress = new int[INVENTORY_SIZE];
+        this.flipStart = new long[INVENTORY_SIZE];
         this.items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
         this.quickCheck = RecipeManager.createCheck(RecipeType.CAMPFIRE_COOKING);
     }
@@ -61,18 +67,18 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
 
     public static void particleTick(Level level, BlockPos pos, BlockState state, GrillBlockEntity grill) {
         RandomSource r = level.random;
-        if (r.nextFloat() < 0.11F) {
-            for (int i = 0; i < r.nextInt(2) + 2; ++i) makeParticles(level, pos);
+        if (state.getValue(GrillBlock.LIT) && r.nextFloat() < 0.04F) {
+            for (int i = 0; i < r.nextInt(2) + 1; ++i) makeParticles(level, pos);
         }
         int base = state.getValue(GrillBlock.FACING).get2DDataValue();
         for (int j = 0; j < grill.items.size(); ++j) {
-            if (!grill.items.get(j).isEmpty() && r.nextFloat() < 0.2F) {
+            if (!grill.items.get(j).isEmpty() && r.nextFloat() < 0.08F) {
                 Direction dir = Direction.from2DDataValue(Math.floorMod(j + base, 4));
                 float off = 0.15625F;
                 double x = pos.getX() + 0.5 - dir.getStepX() * off + dir.getClockWise().getStepX() * off;
                 double y = pos.getY() + 1.2;
                 double z = pos.getZ() + 0.5 - dir.getStepZ() * off + dir.getClockWise().getStepZ() * off;
-                for (int k = 0; k < 4; ++k) level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 5.0E-4, 0.0);
+                level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 5.0E-4, 0.0);
             }
         }
     }
@@ -95,6 +101,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
                         GrillingUtil.setGrilled(result);
                         Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
                         grill.items.set(i, ItemStack.EMPTY);
+                        grill.flipStart[i] = 0L;
                         level.sendBlockUpdated(pos, state, state, 3);
                         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(state));
                     }
@@ -103,7 +110,9 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         }
         if (hasItems) {
             setChanged(level, pos, state);
-            level.playSound(null, pos, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (level.random.nextInt(40) == 0) {
+                level.playSound(null, pos, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 0.9F + level.random.nextFloat() * 0.2F);
+            }
         }
     }
 
@@ -120,6 +129,11 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
             int[] totals = tag.getIntArray("CookingTotalTimes");
             System.arraycopy(totals, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, totals.length));
         }
+        Arrays.fill(this.flipStart, 0L);
+        if (tag.contains("FlipStart", 12)) {
+            long[] flips = tag.getLongArray("FlipStart");
+            System.arraycopy(flips, 0, this.flipStart, 0, Math.min(this.flipStart.length, flips.length));
+        }
     }
 
     @Override
@@ -128,6 +142,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         ContainerHelper.saveAllItems(tag, this.items, provider);
         tag.putIntArray("CookingTimes", this.cookingProgress);
         tag.putIntArray("CookingTotalTimes", this.cookingTime);
+        tag.putLongArray("FlipStart", this.flipStart);
     }
 
     @Override
@@ -141,6 +156,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         ContainerHelper.saveAllItems(tag, this.items, provider);
         tag.putIntArray("CookingTimes", this.cookingProgress);
         tag.putIntArray("CookingTotalTimes", this.cookingTime);
+        tag.putLongArray("FlipStart", this.flipStart);
         return tag;
     }
 
@@ -171,6 +187,72 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
             }
         }
         return false;
+    }
+
+    public boolean placeFood(Entity entity, ItemStack stack, int cookTime, int slot) {
+        if (!this.items.get(slot).isEmpty()) {
+            return this.placeFood(entity, stack, cookTime);
+        }
+        this.cookingTime[slot] = cookTime;
+        this.cookingProgress[slot] = 0;
+        this.flipStart[slot] = 0L;
+        this.items.set(slot, stack.split(1));
+        if (this.level != null) {
+            this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
+        }
+        this.markUpdated();
+        return true;
+    }
+
+    public static Vec3 slotCenter(BlockState state, int slot) {
+        Direction dir = Direction.from2DDataValue(Math.floorMod(slot + state.getValue(GrillBlock.FACING).get2DDataValue(), 4));
+        return new Vec3(
+                0.5 - dir.getStepX() * SLOT_OFFSET + dir.getClockWise().getStepX() * SLOT_OFFSET,
+                1.0,
+                0.5 - dir.getStepZ() * SLOT_OFFSET + dir.getClockWise().getStepZ() * SLOT_OFFSET);
+    }
+
+    public static int slotAt(BlockState state, BlockPos pos, Vec3 location) {
+        double x = location.x - pos.getX();
+        double z = location.z - pos.getZ();
+        int best = 0;
+        double bestDistance = Double.MAX_VALUE;
+        for (int i = 0; i < INVENTORY_SIZE; i++) {
+            Vec3 center = slotCenter(state, i);
+            double distance = (center.x - x) * (center.x - x) + (center.z - z) * (center.z - z);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                best = i;
+            }
+        }
+        return best;
+    }
+
+    public boolean flip(int slot) {
+        if (this.level == null || this.items.get(slot).isEmpty()) {
+            return false;
+        }
+        long time = this.level.getGameTime();
+        if (this.flipStart[slot] != 0L && time - this.flipStart[slot] < FLIP_COOLDOWN_TICKS) {
+            return false;
+        }
+        this.flipStart[slot] = time;
+        this.markUpdated();
+        return true;
+    }
+
+    public ItemStack take(int slot) {
+        ItemStack stack = this.items.get(slot);
+        this.items.set(slot, ItemStack.EMPTY);
+        this.cookingProgress[slot] = 0;
+        this.cookingTime[slot] = 0;
+        this.flipStart[slot] = 0L;
+        this.markUpdated();
+        return stack;
+    }
+
+    public long getFlipStart(int slot) {
+        return this.flipStart[slot];
     }
 
     public NonNullList<ItemStack> getItems() {

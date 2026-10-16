@@ -1,5 +1,5 @@
 {
-  "parent": "camping:main/root",
+  "parent": "camping:main/get_a_walking_stick",
   "display": {
     "icon": {
       "id": "camping:multitool"

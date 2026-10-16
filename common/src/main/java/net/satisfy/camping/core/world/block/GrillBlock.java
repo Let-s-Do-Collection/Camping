@@ -1,11 +1,13 @@
 package net.satisfy.camping.core.world.block;
 
+import net.minecraft.ChatFormatting;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -72,12 +74,29 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level,
                                               BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof GrillBlockEntity grill)) {
+        if (!(level.getBlockEntity(pos) instanceof GrillBlockEntity grill) || hit.getDirection() != Direction.UP) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        // Optional: nur wenn der Grill brennt darf man was drauflegen
+        int slot = GrillBlockEntity.slotAt(state, pos, hit.getLocation());
+        if (!grill.getItems().get(slot).isEmpty()) {
+            if (!level.isClientSide) {
+                if (player.isShiftKeyDown()) {
+                    ItemStack taken = grill.take(slot);
+                    if (!player.addItem(taken)) {
+                        player.drop(taken, false);
+                    }
+                    level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.4F, 1.2F);
+                } else if (grill.flip(slot)) {
+                    level.playSound(null, pos, SoundEvents.WOOL_HIT, SoundSource.BLOCKS, 0.5F, 1.4F + level.random.nextFloat() * 0.2F);
+                    if (state.getValue(LIT)) {
+                        level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.2F, 1.8F + level.random.nextFloat() * 0.2F);
+                    }
+                }
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         if (!state.getValue(LIT)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
@@ -87,25 +106,13 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        // WICHTIG: auf dem Client nur Erfolg signalisieren -> Server führt Logik aus
         if (level.isClientSide) {
             return ItemInteractionResult.SUCCESS;
         }
 
-        int time = opt.get().getCookingTime();
-
-        // Nur EIN Item platzieren
-        ItemStack one = stack.copyWithCount(1);
-
-        if (grill.placeFood(player, one, time)) {
-            if (!player.getAbilities().instabuild) {
-                stack.shrink(1); // nur wenn placeFood NICHT selbst verkleinert
-            }
-            // Server: Interaktion konsumiert
-            return ItemInteractionResult.CONSUME;
+        if (grill.placeFood(player, stack.copyWithCount(1), opt.get().getCookingTime(), slot) && !player.getAbilities().instabuild) {
+            stack.shrink(1);
         }
-
-        // Slot voll o.Ä.: trotzdem handled
         return ItemInteractionResult.CONSUME;
     }
 
@@ -180,6 +187,6 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").setStyle(Style.EMPTY.withColor(0x556B2F).withItalic(true)));
+        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -4,7 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.ItemLike;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.util.BackpackVariant;
@@ -22,7 +22,10 @@ public class CampingItems {
     public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
-    public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
+    public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().stacksTo(1).durability(175).fireResistant());
+
+    public static final Item MOSQUITO_SWARM_SPAWN_EGG = new SpawnEggItem(CampingEntities.MOSQUITO_SWARM, -1, -1, new Item.Properties());
+    public static final Item MOSQUITO_REPELLENT = new MosquitoRepellentItem(new Item.Properties().durability(16));
 
     public static final Item ENDERPACK = new EnderpackBlockItem(CampingBlocks.ENDERPACK, Camping.identifier("textures/model/enderpack.png"));
     public static final Item ENDERBAG = new EnderpackBlockItem(CampingBlocks.ENDERBAG, Camping.identifier("textures/model/enderbag.png"));
@@ -46,6 +49,8 @@ public class CampingItems {
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
+        consumer.accept(MOSQUITO_REPELLENT, Camping.identifier("mosquito_repellent"));
+        consumer.accept(MOSQUITO_SWARM_SPAWN_EGG, Camping.identifier("mosquito_swarm_spawn_egg"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
         consumer.accept(ENDERBAG, Camping.identifier("enderbag"));
@@ -67,6 +72,7 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(WANDERER_BAG);
         CREATIVE_TAB_ITEMS.add(WALKING_STICK);
         CREATIVE_TAB_ITEMS.add(MULTITOOL);
+        CREATIVE_TAB_ITEMS.add(MOSQUITO_REPELLENT);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW_ON_A_STICK);
@@ -76,9 +82,11 @@ public class CampingItems {
             CREATIVE_TAB_ITEMS.add(block);
         });
 
-        CampingBlocks.TENT_MAIN.forEach((s, block) -> {
+        CampingBlocks.TENTS.forEach((s, block) -> {
             consumer.accept(new BlockItem(block, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(block));
             CREATIVE_TAB_ITEMS.add(block);
         });
+
+        CREATIVE_TAB_ITEMS.add(MOSQUITO_SWARM_SPAWN_EGG);
     }
 }

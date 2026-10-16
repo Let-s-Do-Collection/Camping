@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class MarshmallowItem extends Item {
@@ -20,7 +21,7 @@ public class MarshmallowItem extends Item {
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, Level level, LivingEntity entity) {
         ItemStack out = super.finishUsingItem(stack, level, entity);
         if (!level.isClientSide && roasted) {
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 4 * 20, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, PlatformHelper.getEffectDuration("roasted_marshmallow"), 1));
         }
         return out;
     }

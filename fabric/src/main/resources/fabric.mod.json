@@ -1,44 +1,49 @@
 {
-    "schemaVersion": 1,
-    "id": "${mod_id}",
-    "version": "${version}",
-    "name": "${mod_name}",
-    "description": "${description}\n${credits}",
-    "authors": [
-        "${mod_author}"
+  "schemaVersion": 1,
+  "id": "camping",
+  "version": "${version}",
+  "name": "[Let's Do] Camping",
+  "description": "Let's sleep outside today! Grab your backpack, pack your tent, the grill, and the sleeping bag, and let's go!",
+  "authors": [
+    "satisfy",
+    "Jason13Official"
+  ],
+  "contact": {
+    "homepage": "https://www.lets-do.ch",
+    "wiki": "https://lets-do.ch/wiki/camping/",
+    "sources": "https://github.com/Let-s-Do-Collection/Camping",
+    "issues": "https://github.com/satisfyu/Let-s-Do-Hub"
+  },
+  "license": "Custom",
+  "icon": "pack.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.satisfy.camping.CampingFabric"
     ],
-    "contact": {
-        "homepage": "https://github.com/Let-s-Do-Collection/Let-s-Do-Collection"
-    },
-    "license": "${license}",
-    "icon": "${mod_id}.png",
-    "environment": "*",
-    "entrypoints": {
-        "main": [
-            "net.satisfy.camping.CampingFabric"
-        ],
-        "client": [
-            "net.satisfy.camping.CampingClientFabric"
-        ],
-        "modmenu": [
-            "net.satisfy.camping.core.config.ModMenu"
-        ],
-        "jei_mod_plugin": [
-            "net.satisfy.camping.optional.FabricJEICampingPlugin"
-        ]
-    },
-    "mixins": [
-        "${mod_id}.fabric.mixins.json"
+    "client": [
+      "net.satisfy.camping.CampingClientFabric"
     ],
-    "depends": {
-        "fabricloader": ">=0.16.0",
-        "fabric-api": "*",
-        "minecraft": "1.21.1",
-        "java": ">=21",
-        "cloth-config": "*"
-    },
-    "suggests": {
-        "modmenu": "*",
-        "trinkets": ">=3.10.0"
-    }
+    "modmenu": [
+      "net.satisfy.camping.core.config.ModMenu"
+    ],
+    "jei_mod_plugin": [
+      "net.satisfy.camping.optional.FabricJEICampingPlugin"
+    ]
+  },
+  "mixins": [
+    "camping.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric-api": "*",
+    "minecraft": "~1.21.1",
+    "architectury": ">=13.0.8",
+    "foundation": ">=1.0.7",
+    "cloth-config": "*"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "trinkets": ">=3.10.0"
+  }
 }
